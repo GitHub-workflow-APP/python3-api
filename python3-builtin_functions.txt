@@ -1,0 +1,69 @@
+# <func,argname,argname;returns:[SOIPCR]> (Safe, sOurce, sInk, Propagator, Cleanser, Risky)
+abs,x;int|float:S
+all,iterable;bool:S
+any,iterable;bool:S
+ascii,object;str:SC  # cleased repr of object, with \x \u \U escapes for non-ASCII chars
+bin,x;str:S
+bool,[x];bool:S
+bytearray,[source[,encoding[,errors]]];bytearray:P{type(source) == str}
+bytes,[source[,encoding[,errors]]];bytes:P{type(source) == str}
+callable,object;bool:S
+chr,int;str:P  # propagator because tainted int can end up in a tainted str
+@classmethod,function;function:S  # decorator, makes an method def a class method
+compile,source,filename,mode[,flags,dont_inherit,optimize];ast.AST:P{source=Tainted}  # risky: compiles source from a string, can be executed later
+complex,[real[,imag]];complex|int|float:S
+delattr,object,name;:RI{name=Tainted->CWE-20}  # Input Validation; user controlled deletion of attributes
+dict,[mapping|iterable],**kwargs;dict:P
+dir,[object];list:P  # list is expected to be a list of str
+divmod,a,b;tuple(int,int):P
+enumerate,iterable[,start];enumerate:P
+eval,expression[,globals][,locals];*:RI{expression=Tainted->CWE-95}P{=globals|=locals}O{=globals|=locals}  # can be a source or propagator if a context is provided
+exec,object[,globals[,locals]];None:RI{object=Tainted}P{=globals|=locals}O{=globals|=locals}
+filter,function,iterable;iterable:P  # if `function` can cleanse, it *might* serve as a cleaanser. FUTURE
+float,[x];float:C{type(x) == str}P{x=Tainted && type(x) != str}
+format
+frozenset
+getattr
+globals
+hasattr
+hash
+help
+hex
+id
+input
+int
+isinstance
+issubclass
+iter
+len
+list
+locals
+map
+max
+memoryview
+min
+next
+object
+oct
+open
+ord
+pow
+print
+property
+range
+repr
+reversed
+round
+set
+setattr
+slice
+sorted
+staticmethod
+str
+sum
+super
+tuple
+type
+vars
+zip
+__import__
